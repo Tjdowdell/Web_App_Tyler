@@ -9,10 +9,10 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
 
 <link href="../css/mystyle.css" rel="stylesheet" type="text/css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -25,7 +25,7 @@
   <body>
   <div class="wrapper">
    <div class="row">
-    	<a href="../php/login.html" class="btn btn-default login-btn hidden-xs">Employee Login</a>
+    	<a href="../php/login.php" class="btn btn-default login-btn hidden-xs">Employee Login</a>
     </div>
     <header>
     	<div class="row">
@@ -62,11 +62,11 @@
       <ul class="nav navbar-nav">
       <li><a href="../index.html">Home</a></li>
         <li><a href="../pages/about.html">About</a></li>
-        <li class="active"><a href="../pages/used_vehicles.html">Used Vehicles<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="../php/used_vehicles.php">Used Vehicles<span class="sr-only">(current)</span></a></li>
         <li><a href="../pages/finance.html">Finance</a></li>
         <li><a href="../pages/testimonials.html">Testimonials</a></li>
         <li><a href="../pages/contact.html">Contact Us</a></li>
-        <li><a href="../php/login.html" class="hidden-sm hidden-md hidden-lg">Employee Login</a></li>
+        <li><a href="../php/login.php" class="hidden-sm hidden-md hidden-lg">Employee Login</a></li>
         
       </ul>
       
@@ -78,24 +78,55 @@
         <div class="col-xs-12">
         	<article class="inner-main-content">
             	<h1>West Coast Autos - Used Vehicles</h1>
-                <div class="row">
-                	<div class="col-md-7">
-                    <h2>Manufacturer: <small>Toyota</small></h2>
-                    <h2>Model: <small>Land Cruiser</small></h2>
-                    <h2>Category: <small>Wagon</small></h2>
-                    <h2>Year: <small>1991</small></h2>
-                    <h2>Price: <small>$7500</small></h2>
-                    <h2>Kilometers: <small>425,000</small></h2>
-                    <h2>Cylinders: <small>6</small></h2>
-                    <h2>Fuel: <small>Diesel</small></h2>
-                    <h2>Transmission: <small>Manual</small></h2>
-                    </div>
-                
-                	<div class="col-md-4">
-                    <img src="../images/land_cruiser.jpg" class="img-responsive vehicle-img">
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
+				<?php
+				session_start();
+				
+				include('connect.php');
+				$query = "SELECT * FROM `vehicles` ORDER BY `Stock_No` ASC";
+				
+				$result = mysqli_query($con, $query);
+				
+				while ($row = mysqli_fetch_assoc($result)) {
+					$query2 = "SELECT * FROM `manufacturer` WHERE `Manufacturer_ID` = " . $row['Manufacturer_ID'];
+				
+					$result2 = mysqli_query($con, $query2);
+				
+					while ($row2 = mysqli_fetch_assoc($result2)) {
+						$query3 = "SELECT * FROM `category` WHERE `Category_ID` = " . $row['Category_ID'];
+					
+						$result3 = mysqli_query($con, $query3);
+					
+						while ($row3 = mysqli_fetch_assoc($result3)) {
+					
+					echo "<div class='well'>";
+						echo "<div class ='row'>";
+							echo "<div class='col-md-7'>";
+								echo "<h2>VIN: <small>" . $row['VIN'] . "</small></h2>";
+								echo "<h2>Stock_No: <small>" . $row['Stock_No'] . "</small></h2>";
+								echo "<h2>Manufacturer: <small>" . $row2['Name'] . "</small></h2>";
+								echo "<h2>Model: <small>" . $row['Model'] . "</small></h2>";
+								echo "<h2>Category: <small>" . $row3['Description'] . "</small></h2>";
+								echo "<h2>Year: <small>" . $row['Year'] . "</small></h2>";
+								echo "<h2>Price: <small>" . $row['Price'] . "</small></h2>";
+								echo "<h2>Kilometers: <small>" . $row['Kilometers'] . "</small></h2>";
+								echo "<h2>Cylinders: <small>" . $row['Cylinders'] . "</small></h2>";
+								echo "<h2>Fuel: <small>" . $row['Fuel'] . "</small></h2>";
+								echo "<h2>Transmission: <small>" . $row['Transmission'] . "</small></h2>";
+								echo "<h2>Registration: <small>" . $row['Registration'] . "</small></h2>";
+								echo "<h2>Colour: <small>" . $row['Colour'] . "</small></h2>";
+							echo "</div>";
+												
+						echo "<div class='col-md-4'>";
+							echo "<img class='img-responsive vehicle-img' src='../images/car_" . $row['Stock_No'] . ".jpg'>";
+						echo "</div>";
+						echo "<div class='col-md-1'></div>";
+						echo "</div>";
+					echo "</div>";
+						}
+					}
+				}
+				?>
+				
             </article>
         </div>
 </div>
@@ -117,8 +148,8 @@
 </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </body>
 </html>

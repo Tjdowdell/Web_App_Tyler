@@ -1,3 +1,9 @@
+<?php
+
+session_start();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,14 +11,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Employee Login</title>
+    <title>View Customers</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css" type="text/css">
 
 <link href="../css/mystyle.css" rel="stylesheet" type="text/css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -25,7 +31,7 @@
   <body>
   <div class="wrapper">
    <div class="row">
-    	<a href="php/login.php" class="btn btn-default login-btn hidden-xs">Employee Login</a>
+    	<a href="login.html" class="btn btn-default login-btn hidden-xs">Employee Login</a>
     </div>
     <header>
     	<div class="row">
@@ -62,11 +68,11 @@
       <ul class="nav navbar-nav">
       <li><a href="../index.html">Home</a></li>
         <li><a href="../pages/about.html">About</a></li>
-        <li><a href="../pages/used_vehicles.html">Used Vehicles</a></li>
+        <li><a href="../php/used_vehicles.php">Used Vehicles</a></li>
         <li><a href="../pages/finance.html">Finance</a></li>
         <li ><a href="../pages/testimonials.html">Testimonials</a></li>
         <li><a href="../pages/contact.html">Contact Us</a></li>
-        <li class="active"><a href="../php/login.html" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="../php/login.php" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
       </ul>
       
       
@@ -76,34 +82,62 @@
     <div class="row"> 
         <div class="col-xs-12">
         	<article class="inner-main-content">
-            	<h1>Employee Dashboard</h1>
-                <div class="row">
-                  <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon1">Username</span>
-                      <input type="text" class="form-control" placeholder="Enter Username" aria-describedby="basic-addon1">
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                  <br><br>
-                  <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
-                    <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon2">Password</span>
-                      <input type="password" class="form-control" placeholder="Enter Password" aria-describedby="basic-addon2">
-                    </div><!-- /input-group -->
-                  </div><!-- /.col-lg-6 -->
-                  <br><br>
-                  </div>
-                      <div class="row">
+            	<h1>View Customers</h1>
+				  <div class="row">
                       <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                          <p class="btn btn-success">Login</p>
+                          <a href="sale.php"><p class="btn btn-success">Add Sale</p></a>
                           </div>
                           <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                            <a href="view_customers.html"><p class="btn btn-success">View Customers</p></a>
+                            <a href="view_customers.php"><p class="btn btn-success">View Customers</p></a>
                             </div>
                           <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                            <a href="add_customers.html"><p class="btn btn-success">Add Customers</p></a>
+                            <a href="add_customers.php"><p class="btn btn-success">Add Customers</p></a>
                           </div>
                 </div>
+				<br>
+                <div class="row">
+				<form role="form" action= "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+                  <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1">Customer Last Name</span>
+                      <input type="text" class="form-control" placeholder="Enter Last Name" aria-describedby="basic-addon1" name= "lastname">
+                    </div><!-- /input-group -->
+                  </div><!-- /.col-lg-6 -->
+                  <br><br>
+                  <button class="btn btn-default">Submit</button>
+				  </form>
+				  <br><br>
+				  <div class="row">
+					<div class="col-md-12">
+						<?php
+						if ($_POST) {
+							$lastname = "";
+							$lastname = $_POST['lastname'];
+							
+						include('connect.php');
+						$query = "SELECT * FROM `customers` WHERE `Last_Name` LIKE '%$lastname%'";
+						$result = mysqli_query($con, $query);
+						while ($row = mysqli_fetch_assoc($result)) {
+							echo "<div class='well'>";
+							echo "<h2>Customer ID : <small>" . $row['Customer_ID'] . "</small></h2>";
+							echo "<h2>First Name : <small>" . $row['First_Name'] . "</small></h2>";
+							echo "<h2>Last Name : <small>" . $row['Last_Name'] . "</small></h2>";
+							echo "<h2>Address : <small>" . $row['Address'] . "</small></h2>";
+							echo "<h2>City : <small>" . $row['City'] . "</small></h2>";
+							echo "<h2>State : <small>" . $row['State'] . "</small></h2>";
+							echo "<h2>Postcode : <small>" . $row['Postcode'] . "</small></h2>";
+							echo "<h2>Email : <small>" . $row['Email_Address'] . "</small></h2>";
+							echo "<h2>Phone : <small>" . $row['Phone_Number'] . "</small></h2>";
+							echo "</div>";
+						}
+						}
+						?>
+						
+					</div>
+				  </div>
+                  
+                  </div>
+                    
                 
             </article>
         </div>
@@ -125,9 +159,9 @@
 
 </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-2.2.1.min"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </body>
 </html>

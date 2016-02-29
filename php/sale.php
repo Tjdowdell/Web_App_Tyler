@@ -1,3 +1,30 @@
+<?php
+
+session_start();
+$success = $error = "";
+if ($_POST) {
+	$staffid = $customerid = $stocknumber = "";
+	$staffid = $_POST['staffid'];
+	$customerid = $_POST['customerid'];
+	$stocknumber = $_POST['stocknumber'];
+
+	
+include('connect.php');
+
+$query = "INSERT INTO `database_tyler`.`sale` (`Recipt_No`, `Staff_ID`, `Customer_ID`, `Date`, `Stock_No`) VALUES (NULL, '$staffid', '$customerid', NOW(), '$stocknumber');";
+
+$result = mysqli_query($con, $query);
+
+if ($result) {
+	$success = "You have created a sale";
+} else {
+	$error = "Could not add the sale, check that Customer ID, Staff ID and Vehicle Numbers are correct";
+}
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,10 +36,10 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css" type="text/css">
 
 <link href="../css/mystyle.css" rel="stylesheet" type="text/css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -62,11 +89,11 @@
       <ul class="nav navbar-nav">
       <li><a href="../index.html">Home</a></li>
         <li><a href="../pages/about.html">About</a></li>
-        <li><a href="../pages/used_vehicles.html">Used Vehicles</a></li>
+        <li><a href="../php/used_vehicles.php">Used Vehicles</a></li>
         <li><a href="../pages/finance.html">Finance</a></li>
         <li ><a href="../pages/testimonials.html">Testimonials</a></li>
         <li><a href="../pages/contact.html">Contact Us</a></li>
-        <li class="active"><a href="../php/login.html" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="../php/login.php" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
       </ul>
       
       
@@ -77,40 +104,46 @@
         <div class="col-xs-12">
         	<article class="inner-main-content">
             	<h1>Add Sale</h1>
+				<?php echo $success . $error ?>
+				<div class="row">
+                      <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
+                          <a href="sale.php"><p class="btn btn-success">Add Sale</p></a>
+                          </div>
+                          <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
+                            <a href="view_customers.php"><p class="btn btn-success">View Customers</p></a>
+                            </div>
+                          <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
+                            <a href="add_customers.php"><p class="btn btn-success">Add Customers</p></a>
+                          </div>
+                </div>
+				<br>
                 <div class="row">
+				<form role="form" action= "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1">Staff ID</span>
-                      <input type="text" class="form-control" placeholder="Enter Staff ID" aria-describedby="basic-addon1">
+                      <input type="text" class="form-control" placeholder="Enter Staff ID" aria-describedby="basic-addon1" name="staffid">
                     </div><!-- /input-group -->
                   </div><!-- /.col-lg-6 -->
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon2">Customer ID</span>
-                      <input type="text" class="form-control" placeholder="Enter Customer ID" aria-describedby="basic-addon2">
+                      <input type="text" class="form-control" placeholder="Enter Customer ID" aria-describedby="basic-addon2" name="customerid">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon3">Stock Number</span>
-                      <input type="text" class="form-control" placeholder="Enter Stock Number" aria-describedby="basic-addon3">
+                      <span class="input-group-addon" id="basic-addon3">Vehicle Number</span>
+                      <input type="text" class="form-control" placeholder="Enter Vehicle Number" aria-describedby="basic-addon3" name="stocknumber">
                     </div>
                   </div>
                   <br><br>
+				  <button type="submit" class="btn btn-default">Submit</button>
+				  </form>
                   </div>
-                      <div class="row">
-                      <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                          <a href="sale.html"><p class="btn btn-success">Add Sale</p></a>
-                          </div>
-                          <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                            <a href="view_customers.html"><p class="btn btn-success">View Customers</p></a>
-                            </div>
-                          <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                            <a href="add_customers.html"><p class="btn btn-success">Add Customers</p></a>
-                          </div>
-                </div>
+                      
                 
             </article>
         </div>
@@ -132,9 +165,9 @@
 
 </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../js/jquery-2.2.1.min"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </body>
 </html>

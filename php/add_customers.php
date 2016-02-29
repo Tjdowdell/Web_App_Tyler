@@ -1,3 +1,32 @@
+<?php
+
+session_start();
+$success = "";
+if ($_POST) {
+	$firstname = $lastname = $address = $city = $state = $postcode = $email = $phone = "";
+	$firstname = $_POST['firstname'];
+	$lastname = $_POST['lastname'];
+	$address = $_POST['address'];
+	$city = $_POST['city'];
+	$state = $_POST['state'];
+	$postcode = $_POST['postcode'];
+	$email  = $_POST['email'];
+	$phone = $_POST['phone'];
+	
+include('connect.php');
+
+$query = "INSERT INTO `database_tyler`.`customers` (`Customer_ID`, `First_Name`, `Last_Name`, `Address`, `City`, `State`, `Postcode`, `Email_Address`, `Phone_Number`) VALUES (NULL, '$firstname', '$lastname', '$address', '$city', '$state', '$postcode', '$email', '$phone');";
+
+$result = mysqli_query($con, $query);
+
+if ($result) {
+	$success = "You have added " . $firstname . " " . $lastname . " to the database!";
+}
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,10 +38,10 @@
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css" type="text/css">
 
 <link href="../css/mystyle.css" rel="stylesheet" type="text/css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -62,13 +91,12 @@
       <ul class="nav navbar-nav">
       <li><a href="../index.html">Home</a></li>
         <li><a href="../pages/about.html">About</a></li>
-        <li><a href="../pages/used_vehicles.html">Used Vehicles</a></li>
+        <li><a href="../php/used_vehicles.php">Used Vehicles</a></li>
         <li><a href="../pages/finance.html">Finance</a></li>
         <li ><a href="../pages/testimonials.html">Testimonials</a></li>
         <li><a href="../pages/contact.html">Contact Us</a></li>
-        <li class="active"><a href="../php/login.html" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
+        <li class="active"><a href="../php/login.php" class="hidden-sm hidden-md hidden-lg">Employee Login<span class="sr-only">(current)</span></a></li>
       </ul>
-      
       
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -77,74 +105,77 @@
         <div class="col-xs-12">
         	<article class="inner-main-content">
             	<h1>Add Customers</h1>
+				<h2><?php echo $success; ?></h2>
                 <div class="row">
                       <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                          <a href="sale.html"><p class="btn btn-success">Add Sale</p></a>
+                          <a href="sale.php"><p class="btn btn-success">Add Sale</p></a>
                           </div>
                           <div class="col-lg-4 col-md-4 col-ms-4 col-xs-4">
-                            <a href="view_customers.html"><p class="btn btn-success">View Customers</p></a>
+                            <a href="view_customers.php"><p class="btn btn-success">View Customers</p></a>
                             </div>
                           
                           <br> <br>
                 </div>
                 <div class="row">
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
+				  <form role="form" action= "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1">Firstname</span>
-                      <input type="text" class="form-control" placeholder="Firstname" aria-describedby="basic-addon1">
+                      <input type="text" class="form-control" placeholder="Firstname" aria-describedby="basic-addon1" name="firstname">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon2">Lastname</span>
-                      <input type="text" class="form-control" placeholder="Lastname" aria-describedby="basic-addon2">
+                      <input type="text" class="form-control" placeholder="Lastname" aria-describedby="basic-addon2" name="lastname">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon3">Address</span>
-                      <input type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon3">
+                      <input type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon3" name="address">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon4">City</span>
-                      <input type="text" class="form-control" placeholder="City" aria-describedby="basic-addon4">
+                      <input type="text" class="form-control" placeholder="City" aria-describedby="basic-addon4" name="city">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon5">State</span>
-                      <input type="text" class="form-control" placeholder="State" aria-describedby="basic-addon5">
+                      <input type="text" class="form-control" placeholder="State" aria-describedby="basic-addon5" name="state">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon6">Postcode</span>
-                      <input type="text" class="form-control" placeholder="Postcode" aria-describedby="basic-addon6">
+                      <input type="text" class="form-control" placeholder="Postcode" aria-describedby="basic-addon6" name="postcode">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
-                      <span class="input-group-addon" id="basic-addon7">Email Address</span>
-                      <input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon7">
+                      <span class="input-group-addon" id="basic-addon7">Email</span>
+                      <input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon7" name="email">
                     </div>
                   </div>
                   <br><br>
                   <div class="col-lg-7 col-md-7 col-sm-11 col-xs-11">
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon8">Phone</span>
-                      <input type="text" class="form-control" placeholder="Phone Number" aria-describedby="basic-addon8">
+                      <input type="text" class="form-control" placeholder="Phone Number" aria-describedby="basic-addon8" name="phone">
                        
                     </div>
                     <br>
-                    <p class="btn btn-success">Add Customers</p>
+                    <button type="submit" class="btn btn-success">Add Customers</button>
+					<form>
                   </div>
                   <br><br>
                   </div>
@@ -171,8 +202,8 @@
 </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../js/jquery-2.2.1.min"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   </body>
 </html>
