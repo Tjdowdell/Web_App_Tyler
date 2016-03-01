@@ -52,7 +52,7 @@ if ($result) {
   <body>
   <div class="wrapper">
    <div class="row">
-    	<a href="login.html" class="btn btn-default login-btn hidden-xs">Employee Login</a>
+    	<a href="logout.php" class="btn btn-default login-btn hidden-xs">Logout</a>
     </div>
     <header>
     	<div class="row">
